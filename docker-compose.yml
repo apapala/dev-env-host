@@ -1,0 +1,30 @@
+
+version: '3'
+
+services:
+
+   redis:
+       container_name: redis
+       image: redis
+       restart: always
+       ports:
+           - "6379:6379"
+
+   mailcatcher:
+       container_name: mailcatcher
+       hostname: mailcatcher
+       image: schickling/mailcatcher
+       restart: always
+       ports:
+           - "1080:1080"
+
+   nginx-proxy:
+       image: jwilder/nginx-proxy
+       container_name: nginx-proxy
+       hostname: nginx-proxy
+       restart: always
+       ports:
+           - "80:80"
+           - "443:443"
+       volumes:
+           - /var/run/docker.sock:/tmp/docker.sock:ro
