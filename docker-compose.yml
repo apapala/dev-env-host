@@ -1,30 +1,53 @@
-
-version: '3'
+version: '3.5'
 
 services:
 
-   redis:
-       container_name: redis
-       image: redis
-       restart: always
-       ports:
-           - "6379:6379"
+    redis:
+        container_name: redis
+        image: redis
+        restart: always
+        ports:
+            - "6379:6379"
+        networks:
+            - dev_env
 
-   mailcatcher:
-       container_name: mailcatcher
-       hostname: mailcatcher
-       image: schickling/mailcatcher
-       restart: always
-       ports:
-           - "1080:1080"
+    mailcatcher:
+        container_name: mailcatcher
+        hostname: mailcatcher
+        image: schickling/mailcatcher
+        restart: always
+        ports:
+            - "1080:1080"
+        networks:
+            - dev_env
 
-   nginx-proxy:
-       image: jwilder/nginx-proxy
-       container_name: nginx-proxy
-       hostname: nginx-proxy
-       restart: always
-       ports:
-           - "80:80"
-           - "443:443"
-       volumes:
-           - /var/run/docker.sock:/tmp/docker.sock:ro
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        hostname: nginx-proxy
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - dev_env
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+        restart: always
+        ports:
+            - 8080:80
+        volumes:
+            - /sessionss
+        networks:
+            - dev_env
+
+networks:
+    dev_env:
+        name: dev_env
+
